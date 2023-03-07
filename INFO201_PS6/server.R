@@ -20,37 +20,29 @@ function(input, output, session) {
     output$numEntries <- renderText({
         numEntries <- nrow(data)
         
-        paste("This app uses ", numEntries, " flight data entries from NYC airports")
+        paste("This app uses ", numEntries, " flight data entries from New York airports")
+    })
+    
+    filtered_data <- reactive({
+        dat <- data
+        if (input$airport1) { dat <- dat %>% filter(dat$origin %in% "JFK") }
+        if (input$airport2) { dat <- dat %>% filter(dat$origin %in% "EWR") }
+        if (input$airport3) { dat <- dat %>% filter(dat$origin %in% "LGA") }
+        dat
     })
 
     output$plot <- renderPlot({
-        
-        
-
-        # generate bins based on input$bins from ui.R
-        # x <- unique(data$month)
-        # y <- group_by(data, month) %>% 
-          #  summarize(
-         #       count = n()
-        #    )
-        
-        
-        # plot(data$month, data$flight)
-        # bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        filtered_data <- reactive({
-            dat <- data
-            if (input$airport1) { dat <- dat %>% filter(dat$origin %in% "JFK") }
-            if (input$airport2) { dat <- dat %>% filter(dat$origin %in% "EWR") }
-            if (input$airport3) { dat <- dat %>% filter(dat$origin %in% "LGA") }
-            dat
-        })
-        
         # draw the histogram with the specified number of bins
         hist(filtered_data()$month, breaks=0:12 + .5, col = input$color, border = 'white',
             xlab = 'month',
             main = 'Histogram of flights per month')
-
+    })
+    
+    output$plotSummary <- renderText({
+        filtered_data() %>%
+            pull(flight) %>%
+            length() %>%
+            paste("Number of flights: ", .)
     })
     
     output$txt <- renderText({
