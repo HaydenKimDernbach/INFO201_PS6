@@ -13,7 +13,7 @@ library(shiny)
 fluidPage(
 
     # Application title
-    titlePanel("UAH Lower Troposphere Data"),
+    titlePanel("NYC Flights Data"),
     
     # Sidebar with a slider input for number of bins
     mainPanel(
