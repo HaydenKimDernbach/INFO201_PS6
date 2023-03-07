@@ -20,7 +20,7 @@ function(input, output, session) {
     output$numEntries <- renderText({
         numEntries <- nrow(data)
         
-        paste("This app uses ", numEntries, " flight data entries from New York airports")
+        paste("This app uses ", numEntries, " flight data entries from New York airports in 2013")
     })
     
     filtered_data <- reactive({
@@ -45,9 +45,11 @@ function(input, output, session) {
             paste("Number of flights: ", .)
     })
     
-    output$txt <- renderText({
-        icons <- paste(input$icons, collapse = ", ")
-        paste("You chose", icons)
+    output$table <- renderTable(head(data, input$numRows))
+    
+    output$tableSummary <- renderText({
+        head(data$dep_time, input$numRows) %>% 
+            mean() %>% 
+            paste("Average Departure Time: ", .)
     })
-
 }

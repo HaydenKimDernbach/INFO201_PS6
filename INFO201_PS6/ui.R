@@ -30,7 +30,7 @@ fluidPage(
                     sidebarPanel(
                         radioButtons(
                             "color", "Choose Color",
-                            c("Red", "Blue")
+                            c("darkseagreen2", "coral2")
                         ),
                         strong("Choose Specific Airport"),
                         checkboxInput("airport1", "JFK", FALSE),
@@ -49,14 +49,23 @@ fluidPage(
             
             tabPanel(
                 "Table", 
-                checkboxGroupInput("icons", "Choose icons:",
-                                   choiceNames =
-                                       list(icon("calendar"), icon("bed"),
-                                            icon("cog"), icon("bug")),
-                                   choiceValues =
-                                       list("calendar", "bed", "cog", "bug")
-                ),
-                textOutput("txt")
+                sidebarLayout(
+                    sidebarPanel(
+                        sliderInput(
+                            "numRows",
+                            "Number of Rows Displayed:",
+                            min = 1,
+                            max = 100,
+                            value = 20
+                        )
+                    ),
+                    
+                    # Show a plot of the generated distribution
+                    mainPanel(
+                        textOutput("tableSummary"),
+                        tableOutput("table")
+                    )
+                )
             )
         )
     ),
